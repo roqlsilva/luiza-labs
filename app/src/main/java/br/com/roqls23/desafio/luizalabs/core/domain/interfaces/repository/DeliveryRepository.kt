@@ -1,4 +1,5 @@
 package br.com.roqls23.desafio.luizalabs.core.domain.interfaces.repository
 
-interface DeliveryRepository {
-}
+import br.com.roqls23.desafio.luizalabs.core.domain.entity.DeliveryEntity
+
+interface DeliveryRepository : BaseRepository<DeliveryEntity>
