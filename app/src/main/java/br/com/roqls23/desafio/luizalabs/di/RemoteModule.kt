@@ -2,6 +2,7 @@ package br.com.roqls23.desafio.luizalabs.di
 
 import android.content.Context
 import br.com.roqls23.desafio.luizalabs.core.data.remote.DistrictService
+import br.com.roqls23.desafio.luizalabs.core.data.remote.StateService
 import br.com.roqls23.desafio.luizalabs.utils.Constants
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -66,4 +67,9 @@ class RemoteModule {
     @Singleton
     fun provideDistrictService(retrofit: Retrofit): DistrictService =
         retrofit.create(DistrictService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideStateService(retrofit: Retrofit): StateService =
+        retrofit.create(StateService::class.java)
 }
