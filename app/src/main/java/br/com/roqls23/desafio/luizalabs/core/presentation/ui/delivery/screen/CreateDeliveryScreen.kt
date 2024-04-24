@@ -6,12 +6,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -22,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import br.com.roqls23.desafio.luizalabs.core.domain.dto.CreateDeliveryForm
 import br.com.roqls23.desafio.luizalabs.core.domain.interfaces.enums.TextInputMask
 import br.com.roqls23.desafio.luizalabs.core.presentation.ui.composable.CustomTextField
 import br.com.roqls23.desafio.luizalabs.core.presentation.ui.composable.DatePickerComponent
@@ -31,17 +37,30 @@ import br.com.roqls23.desafio.luizalabs.core.presentation.ui.composable.ScreenSe
 import br.com.roqls23.desafio.luizalabs.core.presentation.ui.delivery.viewmodel.CreateDeliveryViewModel
 
 @Composable
-fun CreateDeliveryScreen() {
+fun CreateDeliveryScreen(
+    onFinish: () -> Unit
+) {
 
     val scrollState = rememberScrollState()
-
     val viewModel = hiltViewModel<CreateDeliveryViewModel>()
 
+    val uiState = viewModel.uiState.collectAsState()
     val districts = viewModel.districts.collectAsState()
     val states = viewModel.states.collectAsState()
 
+    val form = remember { mutableStateOf(CreateDeliveryForm()) }
+
     LaunchedEffect(Unit) {
         viewModel.findStates()
+    }
+
+    LaunchedEffect(key1 = uiState.value) {
+        when (uiState.value) {
+            is CreateDeliveryViewModel.CreateDeliveryUiState.CreatedSuccessfully ->
+                onFinish.invoke()
+
+            else -> Unit
+        }
     }
 
     Column(
@@ -66,25 +85,29 @@ fun CreateDeliveryScreen() {
         ) {
             CustomTextField(
                 label = "#ID da Entrega",
-                onValueChange = {},
+                onValueChange = { form.value.deliveryId = it },
                 modifier = Modifier.padding(top = 8.dp),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
             CustomTextField(
                 label = "Qtd. de pacotes",
-                onValueChange = {},
+                onValueChange = { form.value.packagesCount = it.toInt() },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
             DatePickerComponent(
                 label = "Data limite de entrega",
-                onValueChange = { formattedDate, millis -> }
+                onValueChange = { formattedDate, _ ->
+                    form.value.dueDate = formattedDate
+                }
             )
 
             CustomTextField(
                 label = "Nome do cliente",
-                onValueChange = {},
+                onValueChange = {
+                    form.value.clientName = it
+                },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     capitalization = KeyboardCapitalization.Words
@@ -93,7 +116,9 @@ fun CreateDeliveryScreen() {
 
             MaskedTextField(
                 label = "CPF",
-                onValueChange = {},
+                onValueChange = {
+                    form.value.clientCPF = it
+                },
                 textInputMask = TextInputMask.CPF
             )
         }
@@ -177,11 +202,36 @@ fun CreateDeliveryScreen() {
                 )
             )
         }
+
+        Button(
+            onClick = {
+                viewModel.createDelivery(form.value)
+            },
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Red,
+                contentColor = Color.White,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 24.dp)
+        ) {
+            Text(
+                text = "Salvar",
+                style = TextStyle(
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+            )
+        }
     }
 }
 
 @Composable
 @Preview(showSystemUi = true)
 private fun CreateDeliveryScreenPreview() {
-    CreateDeliveryScreen()
+    CreateDeliveryScreen(
+        onFinish = {}
+    )
 }

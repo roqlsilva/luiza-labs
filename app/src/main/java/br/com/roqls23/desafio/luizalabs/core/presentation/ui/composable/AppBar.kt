@@ -56,7 +56,7 @@ fun AppBar(
                 style = TextStyle(
                     color = Color.White,
                     fontWeight = FontWeight.Medium,
-                    fontSize = 24.sp
+                    fontSize = 18.sp
                 )
             )
         }

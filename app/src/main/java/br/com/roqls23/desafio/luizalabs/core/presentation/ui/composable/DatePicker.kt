@@ -49,7 +49,10 @@ fun DatePickerComponent(
 
     if (showDatePickerDialog) {
         DatePickerDialog(
-            onDismissRequest = { showDatePickerDialog = false },
+            onDismissRequest = {
+                showDatePickerDialog = false
+                focusManager.clearFocus()
+            },
             confirmButton = {
                 Button(
                     onClick = {
@@ -59,6 +62,7 @@ fun DatePickerComponent(
                                 onValueChange.invoke(selectedDate, millis)
                             }
                         showDatePickerDialog = false
+                        focusManager.clearFocus()
                     }
                 ) {
                     Text(text = "Escolher data")
@@ -79,7 +83,6 @@ fun DatePickerComponent(
             .onFocusEvent {
                 if (it.isFocused) {
                     showDatePickerDialog = true
-                    focusManager.clearFocus(force = true)
                 }
             }
             .clip(RoundedCornerShape(8.dp))

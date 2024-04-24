@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Dropdown(
     modifier: Modifier = Modifier,
@@ -46,6 +45,7 @@ fun Dropdown(
     LaunchedEffect(items) {
         selectedItem = ""
         isDropDownExpanded = false
+        focusManager.clearFocus()
     }
 
     TextField(
@@ -57,7 +57,6 @@ fun Dropdown(
             .onFocusEvent {
                 if (it.isFocused) {
                     isDropDownExpanded = true
-                    focusManager.clearFocus(force = true)
                 }
             }
             .clip(RoundedCornerShape(8.dp))
@@ -94,7 +93,10 @@ fun Dropdown(
 
     DropdownMenu(
         expanded = isDropDownExpanded,
-        onDismissRequest = { isDropDownExpanded = false },
+        onDismissRequest = {
+            isDropDownExpanded = false
+            focusManager.clearFocus()
+        },
         modifier = Modifier.fillMaxSize(fraction = .75f),
         properties = PopupProperties(
             dismissOnBackPress = true,
@@ -110,6 +112,7 @@ fun Dropdown(
                 onClick = {
                     selectedItem = item
                     isDropDownExpanded = false
+                    focusManager.clearFocus()
 
                     onSelectItem.invoke(item)
                 }

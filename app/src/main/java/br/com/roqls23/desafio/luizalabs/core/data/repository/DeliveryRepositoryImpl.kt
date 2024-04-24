@@ -7,22 +7,20 @@ import br.com.roqls23.desafio.luizalabs.core.domain.interfaces.repository.Delive
 class DeliveryRepositoryImpl(
     private val dao: DeliveryDao
 ) : DeliveryRepository {
-    override fun create(entity: DeliveryEntity): Long =
+    override suspend fun create(entity: DeliveryEntity): Long =
         dao.create(entity)
 
-    override fun update(entity: DeliveryEntity) {
+    override suspend fun update(entity: DeliveryEntity) {
         TODO("Not yet implemented")
     }
 
-    override fun findOne(id: Long): DeliveryEntity? {
-        TODO("Not yet implemented")
-    }
+    override suspend fun findOne(id: Long): DeliveryEntity? =
+        dao.findOne(id)
 
-    override fun findAll(): List<DeliveryEntity> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun findAll(): List<DeliveryEntity> =
+        dao.findAll()
 
-    override fun delete(id: Long) {
+    override suspend fun delete(id: Long) {
         TODO("Not yet implemented")
     }
 }

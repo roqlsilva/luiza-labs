@@ -80,7 +80,9 @@ fun AppNavHost(
         ) {
             pageTitle.value = "Nova Entrega"
             enableBackButtonAppBar.value = true
-            CreateDeliveryScreen()
+            CreateDeliveryScreen(
+                onFinish = { navController.popBackStack() }
+            )
         }
 
         composable(
