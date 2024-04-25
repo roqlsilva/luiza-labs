@@ -8,14 +8,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,16 +35,23 @@ import androidx.compose.ui.window.PopupProperties
 @Composable
 fun Dropdown(
     modifier: Modifier = Modifier,
+    selectedIndex: State<Int>,
     label: String,
     items: List<String> = emptyList(),
     onSelectItem: (String) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
-    var selectedItem by remember { mutableStateOf("") }
+    var selectedItem by remember {
+        mutableStateOf("")
+    }
     var isDropDownExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(items) {
-        selectedItem = ""
+        selectedItem = selectedIndex.value.takeIf { it != -1 }
+            ?.let { index ->
+                items.takeIf { it.isNotEmpty() }
+                    ?.let { it[index] } ?: ""
+            } ?: ""
         isDropDownExpanded = false
         focusManager.clearFocus()
     }
@@ -126,6 +134,7 @@ fun Dropdown(
 private fun DropdownPreview() {
     Dropdown(
         modifier = Modifier.fillMaxWidth(),
+        selectedIndex = remember { mutableIntStateOf(0) },
         label = "Estados",
         items = emptyList(),
         onSelectItem = {}

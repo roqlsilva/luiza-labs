@@ -11,9 +11,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import br.com.roqls23.desafio.luizalabs.core.presentation.ui.composable.AppBar
 import br.com.roqls23.desafio.luizalabs.core.presentation.ui.delivery.DeliveryRoutes
 import br.com.roqls23.desafio.luizalabs.core.presentation.ui.delivery.screen.CreateDeliveryScreen
@@ -71,6 +73,11 @@ fun AppNavHost(
             ListDeliveriesScreen(
                 onClickNewDelivery = {
                     navController.navigate(DeliveryRoutes.CREATE)
+                },
+                onEditDelivery = {
+                    navController.navigate(
+                        route = DeliveryRoutes.UPDATE.replace("{id}", it.id.toString())
+                    )
                 }
             )
         }
@@ -86,11 +93,18 @@ fun AppNavHost(
         }
 
         composable(
-            route = DeliveryRoutes.UPDATE
-        ) {
-            pageTitle.value = "Atualizar Entrega"
-            enableBackButtonAppBar.value = true
-            UpdateDeliveryScreen()
+            route = DeliveryRoutes.UPDATE,
+            arguments = listOf(
+                navArgument("id") { type = NavType.LongType }
+            )
+        ) { navBackStackEntry ->
+            navBackStackEntry.arguments?.getLong("id")?.let { id ->
+                pageTitle.value = "Atualizar Entrega"
+                enableBackButtonAppBar.value = true
+                UpdateDeliveryScreen(
+                    onFinish = { navController.popBackStack() }
+                )
+            }
         }
     }
 }

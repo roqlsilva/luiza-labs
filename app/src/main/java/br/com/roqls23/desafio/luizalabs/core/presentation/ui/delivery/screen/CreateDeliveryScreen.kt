@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -43,6 +44,9 @@ fun CreateDeliveryScreen(
 
     val scrollState = rememberScrollState()
     val viewModel = hiltViewModel<CreateDeliveryViewModel>()
+
+    val selectedStateIndex = remember { mutableIntStateOf(-1) }
+    val selectedDistrictStateIndex = remember { mutableIntStateOf(-1) }
 
     val uiState = viewModel.uiState.collectAsState()
     val districts = viewModel.districts.collectAsState()
@@ -138,7 +142,7 @@ fun CreateDeliveryScreen(
         ) {
             MaskedTextField(
                 label = "CEP",
-                onValueChange = {},
+                onValueChange = { form.value.postalCode = it},
                 textInputMask = TextInputMask.CEP
             )
 
@@ -146,13 +150,17 @@ fun CreateDeliveryScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
+                selectedIndex = selectedStateIndex,
                 items = states.value.map { it.nome }.sorted(),
                 label = "Estado",
                 onSelectItem = { item ->
                     states.value.indexOfFirst { it.nome == item }
                         .takeIf { it != -1 }
                         ?.let { index ->
-                            viewModel.findDistricts(states.value[index].sigla)
+                            val uf = states.value[index]
+                            selectedStateIndex.intValue = index
+                            form.value.uf = uf.nome
+                            viewModel.findDistricts(uf.sigla)
                         }
                 }
             )
@@ -161,14 +169,23 @@ fun CreateDeliveryScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
+                selectedIndex = selectedDistrictStateIndex,
                 label = "Cidade",
                 items = districts.value.map { it.nome }.sorted(),
-                onSelectItem = {}
+                onSelectItem = { item ->
+                    districts.value.indexOfFirst { it.nome == item }
+                        .takeIf { it != -1 }
+                        ?.let { index ->
+                            val district = districts.value[index]
+                            form.value.city = district.nome
+                            selectedDistrictStateIndex.intValue = index
+                        }
+                }
             )
 
             CustomTextField(
                 label = "Bairro",
-                onValueChange = {},
+                onValueChange = { form.value.district = it },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     capitalization = KeyboardCapitalization.Words
@@ -177,7 +194,7 @@ fun CreateDeliveryScreen(
 
             CustomTextField(
                 label = "Rua",
-                onValueChange = {},
+                onValueChange = { form.value.street = it },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     capitalization = KeyboardCapitalization.Words
@@ -186,7 +203,7 @@ fun CreateDeliveryScreen(
 
             CustomTextField(
                 label = "Número",
-                onValueChange = {},
+                onValueChange = { form.value.number = it },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     capitalization = KeyboardCapitalization.Words
@@ -195,7 +212,7 @@ fun CreateDeliveryScreen(
 
             CustomTextField(
                 label = "Complemento (Opcional)",
-                onValueChange = {},
+                onValueChange = { form.value.complement = it },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     capitalization = KeyboardCapitalization.Words

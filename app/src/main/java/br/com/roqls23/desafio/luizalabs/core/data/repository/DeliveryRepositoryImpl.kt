@@ -21,6 +21,8 @@ class DeliveryRepositoryImpl(
         dao.findAll()
 
     override suspend fun delete(id: Long) {
-        TODO("Not yet implemented")
+        this.findOne(id)?.let { entity ->
+            dao.delete(entity)
+        }
     }
 }

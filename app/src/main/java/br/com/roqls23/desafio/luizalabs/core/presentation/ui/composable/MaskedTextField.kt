@@ -27,11 +27,12 @@ import br.com.roqls23.desafio.luizalabs.core.presentation.utils.MaskVisualTransf
 @Composable
 fun MaskedTextField(
     label: String,
+    modifier: Modifier = Modifier,
+    text: String = "",
     onValueChange: (String) -> Unit,
     textInputMask: TextInputMask,
-    modifier: Modifier = Modifier,
 ) {
-    var value by remember { mutableStateOf("") }
+    var value by remember { mutableStateOf(text) }
     TextField(
         value = value,
         label = {

@@ -20,7 +20,14 @@ class CreateDeliveryUseCase @Inject constructor(
             packagesCount = data.packagesCount,
             dueDate = data.dueDate,
             clientName = data.clientName,
-            clientCpf = data.clientCPF
+            clientCpf = data.clientCPF,
+            postalCode = data.postalCode,
+            state = data.uf,
+            city = data.city,
+            district = data.district,
+            street = data.street,
+            number = data.number,
+            complement = data.complement.takeIf { it.isNotEmpty() },
         )
 
         val id = deliveryRepository.create(delivery)

@@ -23,6 +23,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,14 +35,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import br.com.roqls23.desafio.luizalabs.core.domain.entity.DeliveryEntity
+import br.com.roqls23.desafio.luizalabs.core.domain.interfaces.enums.TextInputMask
+import br.com.roqls23.desafio.luizalabs.core.presentation.ui.composable.ConfirmDialog
 import br.com.roqls23.desafio.luizalabs.core.presentation.ui.delivery.viewmodel.ListDeliveriesViewModel
+import br.com.roqls23.desafio.luizalabs.utils.extensions.masked
 
 @Composable
 fun ListDeliveriesScreen(
-    onClickNewDelivery: (() -> Unit)? = null
+    onClickNewDelivery: (() -> Unit)? = null,
+    onEditDelivery: ((DeliveryEntity) -> Unit)? = null
 ) {
 
     val viewModel = hiltViewModel<ListDeliveriesViewModel>()
+    val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
+    val selectedDeliveryId = remember { mutableLongStateOf(0L) }
 
     val deliveries = viewModel.deliveries.collectAsState()
 
@@ -63,7 +73,7 @@ fun ListDeliveriesScreen(
                         .fillMaxWidth()
                         .border(
                             width = 1.dp,
-                            color = Color.DarkGray,
+                            color = Color.Gray,
                             shape = RoundedCornerShape(8.dp)
                         )
                 ) {
@@ -102,7 +112,7 @@ fun ListDeliveriesScreen(
                                 )
                             )
                             Text(
-                                text = delivery.clientCpf,
+                                text = "CPF: ${delivery.clientCpf.masked(TextInputMask.CPF)}",
                                 style = TextStyle(
                                     fontWeight = FontWeight.Light,
                                     fontSize = 14.sp,
@@ -138,7 +148,9 @@ fun ListDeliveriesScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             IconButton(
-                                onClick = {}
+                                onClick = {
+                                    onEditDelivery?.invoke(delivery)
+                                }
                             ) {
                                 Icon(
                                     imageVector = Icons.Filled.Edit,
@@ -148,7 +160,10 @@ fun ListDeliveriesScreen(
                             }
                             Spacer(modifier = Modifier.width(2.dp))
                             IconButton(
-                                onClick = {}
+                                onClick = {
+                                    selectedDeliveryId.longValue = delivery.id
+                                    showDeleteConfirmationDialog.value = true
+                                }
                             ) {
                                 Icon(
                                     imageVector = Icons.Filled.Delete,
@@ -161,8 +176,6 @@ fun ListDeliveriesScreen(
                 }
             }
         }
-
-
 
         IconButton(
             onClick = { onClickNewDelivery?.invoke() },
@@ -183,6 +196,25 @@ fun ListDeliveriesScreen(
             )
         }
     }
+
+    ConfirmDialog(
+        state = showDeleteConfirmationDialog,
+        title = "Remover Entrega",
+        message = "Deseja remover a entrega selecionada?",
+        onDismissRequest = {
+            selectedDeliveryId.longValue = 0L
+            showDeleteConfirmationDialog.value = false
+        },
+        onConfirm = {
+            selectedDeliveryId.longValue.takeIf { it > 0 }
+                ?.let { deliveryId ->
+                    viewModel.deleteDelivery(deliveryId).let {
+                        selectedDeliveryId.longValue = 0L
+                        showDeleteConfirmationDialog.value = false
+                    }
+                }
+        }
+    )
 }
 
 @Composable

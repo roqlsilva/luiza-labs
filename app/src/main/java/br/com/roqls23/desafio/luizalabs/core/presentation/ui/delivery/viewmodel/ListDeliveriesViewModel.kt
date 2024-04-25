@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import br.com.roqls23.desafio.luizalabs.core.domain.entity.DeliveryEntity
 import br.com.roqls23.desafio.luizalabs.core.domain.interfaces.state.DataState
 import br.com.roqls23.desafio.luizalabs.core.domain.usecase.FindAllDeliveriesUseCase
+import br.com.roqls23.desafio.luizalabs.core.domain.usecase.RemoveDeliveryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ListDeliveriesViewModel @Inject constructor(
     application: Application,
-    private val findAllDeliveriesUseCase: FindAllDeliveriesUseCase
+    private val findAllDeliveriesUseCase: FindAllDeliveriesUseCase,
+    private val removeDeliveryUseCase: RemoveDeliveryUseCase,
 ): AndroidViewModel(application) {
 
     private val _deliveries = MutableStateFlow<List<DeliveryEntity>>(emptyList())
@@ -45,4 +47,26 @@ class ListDeliveriesViewModel @Inject constructor(
             e.printStackTrace()
         }.launchIn(viewModelScope)
     }
+
+    fun deleteDelivery(id: Long) = viewModelScope.launch {
+        removeDeliveryUseCase(id).onEach { dataState ->
+            when (dataState) {
+                is DataState.Success -> {
+                    findDeliveries()
+                }
+
+                is DataState.Error -> {
+                    dataState.throwable.printStackTrace()
+                }
+
+                is DataState.Loading -> {
+                    Log.d("RESULT_REQUEST", "Loading...")
+                }
+            }
+        }.catch { e ->
+            e.printStackTrace()
+        }.launchIn(viewModelScope)
+    }
+
+
 }

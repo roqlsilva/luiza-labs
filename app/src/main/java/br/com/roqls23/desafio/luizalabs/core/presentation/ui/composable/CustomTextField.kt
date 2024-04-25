@@ -24,11 +24,12 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun CustomTextField(
     label: String,
-    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    text: String = "",
+    onValueChange: (String) -> Unit,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
 ) {
-    var value by remember { mutableStateOf("") }
+    var value by remember { mutableStateOf(text) }
     TextField(
         value = value,
         label = {

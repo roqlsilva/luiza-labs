@@ -6,4 +6,11 @@ data class CreateDeliveryForm(
     var dueDate: String = "",
     var clientName: String = "",
     var clientCPF: String = "",
+    var postalCode: String = "",
+    var uf: String = "",
+    var city: String = "",
+    var district: String = "",
+    var street: String = "",
+    var number: String = "",
+    var complement: String = "",
 )
