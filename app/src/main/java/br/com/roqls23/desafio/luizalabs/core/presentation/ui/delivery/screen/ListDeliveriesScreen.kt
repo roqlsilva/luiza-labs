@@ -29,12 +29,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import br.com.roqls23.desafio.luizalabs.R
 import br.com.roqls23.desafio.luizalabs.core.domain.entity.DeliveryEntity
 import br.com.roqls23.desafio.luizalabs.core.domain.interfaces.enums.TextInputMask
 import br.com.roqls23.desafio.luizalabs.core.presentation.ui.composable.ConfirmDialog
@@ -85,20 +90,23 @@ fun ListDeliveriesScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "#${delivery.deliveryId}",
-                                style = TextStyle(
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = 18.sp,
-                                    color = Color.DarkGray
-                                )
-                            )
-                            Text(
-                                text = " - (${delivery.packagesCount} pacotes)",
-                                style = TextStyle(
-                                    fontWeight = FontWeight.Light,
-                                    fontSize = 14.sp,
-                                    color = Color.DarkGray
-                                )
+                                text = buildAnnotatedString {
+                                    withStyle(style = SpanStyle(
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = 18.sp,
+                                        color = Color.DarkGray
+                                    )) {
+                                        append(stringResource(id = R.string.delivery_id_item_label, delivery.deliveryId))
+                                    }
+
+                                    withStyle(style = SpanStyle(
+                                        fontWeight = FontWeight.Light,
+                                        fontSize = 14.sp,
+                                        color = Color.DarkGray
+                                    )) {
+                                        append(stringResource(id = R.string.packages_count_item_label, delivery.packagesCount))
+                                    }
+                                }
                             )
                         }
 
@@ -112,7 +120,7 @@ fun ListDeliveriesScreen(
                                 )
                             )
                             Text(
-                                text = "CPF: ${delivery.clientCpf.masked(TextInputMask.CPF)}",
+                                text = stringResource(id = R.string.client_cpf_item_label, delivery.clientCpf.masked(TextInputMask.CPF)),
                                 style = TextStyle(
                                     fontWeight = FontWeight.Light,
                                     fontSize = 14.sp,
@@ -125,7 +133,7 @@ fun ListDeliveriesScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Data limite: ",
+                                text = stringResource(id = R.string.due_date_delivery_item_label),
                                 style = TextStyle(
                                     fontWeight = FontWeight.SemiBold,
                                     fontSize = 16.sp,
@@ -199,8 +207,8 @@ fun ListDeliveriesScreen(
 
     ConfirmDialog(
         state = showDeleteConfirmationDialog,
-        title = "Remover Entrega",
-        message = "Deseja remover a entrega selecionada?",
+        title = stringResource(R.string.delete_dialog_title),
+        message = stringResource(R.string.delete_dialog_message),
         onDismissRequest = {
             selectedDeliveryId.longValue = 0L
             showDeleteConfirmationDialog.value = false

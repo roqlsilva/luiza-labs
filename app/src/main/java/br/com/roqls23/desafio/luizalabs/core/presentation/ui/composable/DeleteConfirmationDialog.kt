@@ -8,10 +8,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import br.com.roqls23.desafio.luizalabs.R
 
 @Composable
 fun ConfirmDialog(
@@ -50,7 +52,7 @@ fun ConfirmDialog(
                     onClick = { onConfirm?.invoke() }
                 ) {
                     Text(
-                        text = "Sim",
+                        text = stringResource(R.string.yes_label),
                         style = TextStyle(
                             fontWeight = FontWeight.Normal,
                             fontSize = 16.sp,
@@ -67,7 +69,7 @@ fun ConfirmDialog(
                     }
                 ) {
                     Text(
-                        text = "Não",
+                        text = stringResource(R.string.no_label),
                         style = TextStyle(
                             fontWeight = FontWeight.Normal,
                             fontSize = 16.sp,
@@ -82,7 +84,7 @@ fun ConfirmDialog(
 
 @Composable
 @Preview
-fun ConfirmDialogPreview() {
+private fun ConfirmDialogPreview() {
     ConfirmDialog(
         state = remember { mutableStateOf(true) },
         title = "Título",

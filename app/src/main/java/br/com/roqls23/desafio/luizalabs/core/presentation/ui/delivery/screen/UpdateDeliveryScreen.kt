@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import br.com.roqls23.desafio.luizalabs.R
 import br.com.roqls23.desafio.luizalabs.core.domain.dto.CreateDeliveryForm
 import br.com.roqls23.desafio.luizalabs.core.domain.interfaces.enums.TextInputMask
 import br.com.roqls23.desafio.luizalabs.core.presentation.ui.composable.CustomTextField
@@ -103,7 +105,7 @@ fun UpdateDeliveryScreen(
             ScreenSection(
                 title = {
                     Text(
-                        text = "Dados da entrega",
+                        text = stringResource(id = R.string.delivery_info),
                         style = TextStyle(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold,
@@ -113,7 +115,7 @@ fun UpdateDeliveryScreen(
                 }
             ) {
                 CustomTextField(
-                    label = "#ID da Entrega",
+                    label = stringResource(id = R.string.delivery_id_label),
                     text = form.value.deliveryId,
                     onValueChange = { form.value.deliveryId = it },
                     modifier = Modifier.padding(top = 8.dp),
@@ -121,21 +123,22 @@ fun UpdateDeliveryScreen(
                 )
 
                 CustomTextField(
-                    label = "Qtd. de pacotes",
+                    label = stringResource(id = R.string.packages_count_label),
                     text = form.value.packagesCount.toString(),
                     onValueChange = { form.value.packagesCount = it.toInt() },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
 
                 DatePickerComponent(
-                    label = "Data limite de entrega",
+                    label = stringResource(id = R.string.due_date_delivery_label),
+                    value = form.value.dueDate,
                     onValueChange = { formattedDate, _ ->
                         form.value.dueDate = formattedDate
                     }
                 )
 
                 CustomTextField(
-                    label = "Nome do cliente",
+                    label = stringResource(id = R.string.client_name_label),
                     text = form.value.clientName,
                     onValueChange = {
                         form.value.clientName = it
@@ -147,7 +150,7 @@ fun UpdateDeliveryScreen(
                 )
 
                 MaskedTextField(
-                    label = "CPF",
+                    label = stringResource(id = R.string.cpf_label),
                     text = form.value.clientCPF,
                     onValueChange = {
                         form.value.clientCPF = it
@@ -160,7 +163,7 @@ fun UpdateDeliveryScreen(
                 modifier = Modifier.padding(top = 24.dp),
                 title = {
                     Text(
-                        text = "Endereço",
+                        text = stringResource(id = R.string.address_label),
                         style = TextStyle(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold,
@@ -170,7 +173,7 @@ fun UpdateDeliveryScreen(
                 }
             ) {
                 MaskedTextField(
-                    label = "CEP",
+                    label = stringResource(id = R.string.postal_code_label),
                     text = form.value.postalCode,
                     onValueChange = { form.value.postalCode = it},
                     textInputMask = TextInputMask.CEP
@@ -182,7 +185,7 @@ fun UpdateDeliveryScreen(
                         .height(56.dp),
                     selectedIndex = selectedStateIndex,
                     items = states.value.map { it.nome }.sorted(),
-                    label = "Estado",
+                    label = stringResource(id = R.string.state_label),
                     onSelectItem = { item ->
                         states.value.indexOfFirst { it.nome == item }
                             .takeIf { it != -1 }
@@ -200,7 +203,7 @@ fun UpdateDeliveryScreen(
                         .fillMaxWidth()
                         .height(56.dp),
                     selectedIndex = selectedDistrictStateIndex,
-                    label = "Cidade",
+                    label = stringResource(id = R.string.city_label),
                     items = districts.value.map { it.nome }.sorted(),
                     onSelectItem = { item ->
                         districts.value.indexOfFirst { it.nome == item }
@@ -214,7 +217,7 @@ fun UpdateDeliveryScreen(
                 )
 
                 CustomTextField(
-                    label = "Bairro",
+                    label = stringResource(id = R.string.district_label),
                     text = form.value.district,
                     onValueChange = { form.value.district = it },
                     keyboardOptions = KeyboardOptions(
@@ -224,7 +227,7 @@ fun UpdateDeliveryScreen(
                 )
 
                 CustomTextField(
-                    label = "Rua",
+                    label = stringResource(id = R.string.street_label),
                     text = form.value.street,
                     onValueChange = { form.value.street = it },
                     keyboardOptions = KeyboardOptions(
@@ -234,7 +237,7 @@ fun UpdateDeliveryScreen(
                 )
 
                 CustomTextField(
-                    label = "Número",
+                    label = stringResource(id = R.string.number_label),
                     text = form.value.number,
                     onValueChange = { form.value.number = it },
                     keyboardOptions = KeyboardOptions(
@@ -244,7 +247,11 @@ fun UpdateDeliveryScreen(
                 )
 
                 CustomTextField(
-                    label = "Complemento (Opcional)",
+                    label = buildString {
+                        append(stringResource(R.string.complement_label))
+                        append(" ")
+                        append("(${stringResource(R.string.optional_label)})")
+                    },
                     text = form.value.complement,
                     onValueChange = { form.value.complement = it },
                     keyboardOptions = KeyboardOptions(
@@ -268,7 +275,7 @@ fun UpdateDeliveryScreen(
                     .padding(top = 24.dp)
             ) {
                 Text(
-                    text = "Salvar",
+                    text = stringResource(id = R.string.btn_save_label),
                     style = TextStyle(
                         fontWeight = FontWeight.Medium,
                         color = Color.White,

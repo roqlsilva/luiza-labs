@@ -24,27 +24,31 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.roqls23.desafio.luizalabs.R
 import br.com.roqls23.desafio.luizalabs.utils.extensions.toBrazilianDateFormat
+import br.com.roqls23.desafio.luizalabs.utils.extensions.toMillis
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerComponent(
     label: String,
-    onValueChange: (String, Long) -> Unit,
     modifier: Modifier = Modifier,
+    value: String = "",
+    onValueChange: (String, Long) -> Unit,
 ) {
 
     val focusManager = LocalFocusManager.current
     var showDatePickerDialog by remember { mutableStateOf(false) }
-    var selectedDate by remember { mutableStateOf("") }
+    var selectedDate by remember { mutableStateOf(value) }
     val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = System.currentTimeMillis(),
-        initialDisplayedMonthMillis = System.currentTimeMillis(),
+        initialSelectedDateMillis = value.takeIf { it.isNotEmpty() }?.toMillis() ?: System.currentTimeMillis(),
+        initialDisplayedMonthMillis = value.takeIf { it.isNotEmpty() }?.toMillis() ?: System.currentTimeMillis(),
     )
 
     if (showDatePickerDialog) {
@@ -65,7 +69,7 @@ fun DatePickerComponent(
                         focusManager.clearFocus()
                     }
                 ) {
-                    Text(text = "Escolher data")
+                    Text(text = stringResource(R.string.choose_date_label))
                 }
             }
         ) {
@@ -109,17 +113,19 @@ fun DatePickerComponent(
                 tint = Color.DarkGray
             )
         },
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color.White,
+        colors = TextFieldDefaults.colors(
+            unfocusedTextColor = Color.DarkGray,
+            focusedContainerColor = Color.White,
+            unfocusedContainerColor = Color.White,
+            disabledContainerColor = Color.White,
             unfocusedLabelColor = Color.LightGray,
-            unfocusedTextColor = Color.DarkGray
         )
     )
 }
 
 @Composable
 @Preview
-fun DatePickerPreview() {
+private fun DatePickerPreview() {
     DatePickerComponent(
         label = "Data limite",
         onValueChange = { _,_ -> }

@@ -10,12 +10,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import br.com.roqls23.desafio.luizalabs.R
 import br.com.roqls23.desafio.luizalabs.core.presentation.ui.composable.AppBar
 import br.com.roqls23.desafio.luizalabs.core.presentation.ui.delivery.DeliveryRoutes
 import br.com.roqls23.desafio.luizalabs.core.presentation.ui.delivery.screen.CreateDeliveryScreen
@@ -68,7 +70,7 @@ fun AppNavHost(
         composable(
             route = DeliveryRoutes.LIST
         ) {
-            pageTitle.value = "Lista de Entregas"
+            pageTitle.value = stringResource(R.string.deliveries_list_title)
             enableBackButtonAppBar.value = false
             ListDeliveriesScreen(
                 onClickNewDelivery = {
@@ -85,7 +87,7 @@ fun AppNavHost(
         composable(
             route = DeliveryRoutes.CREATE
         ) {
-            pageTitle.value = "Nova Entrega"
+            pageTitle.value = stringResource(R.string.new_delivery_title)
             enableBackButtonAppBar.value = true
             CreateDeliveryScreen(
                 onFinish = { navController.popBackStack() }
@@ -99,7 +101,7 @@ fun AppNavHost(
             )
         ) { navBackStackEntry ->
             navBackStackEntry.arguments?.getLong("id")?.let { id ->
-                pageTitle.value = "Atualizar Entrega"
+                pageTitle.value = stringResource(R.string.update_delivery_title)
                 enableBackButtonAppBar.value = true
                 UpdateDeliveryScreen(
                     onFinish = { navController.popBackStack() }

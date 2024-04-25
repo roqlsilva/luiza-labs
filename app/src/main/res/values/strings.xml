@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">Desafio LuizaLabs</string>
+    <string name="delivery_info">Dados da entrega</string>
+    <string name="delivery_id_label">#ID da Entrega</string>
+    <string name="packages_count_label">Qtd. de pacotes</string>
+    <string name="due_date_delivery_label">Data limite de entrega</string>
+    <string name="client_name_label">Nome do cliente</string>
+    <string name="cpf_label">CPF</string>
+    <string name="address_label">Endereço</string>
+    <string name="postal_code_label">CEP</string>
+    <string name="state_label">Estado</string>
+    <string name="city_label">Cidade</string>
+    <string name="district_label">Bairro</string>
+    <string name="street_label">Rua</string>
+    <string name="number_label">Número</string>
+    <string name="complement_label">Complemento</string>
+    <string name="optional_label">Opcional</string>
+    <string name="btn_save_label">Salvar</string>
+    <string name="delivery_id_item_label">#%s</string>
+    <string name="packages_count_item_label"> - (%d pacotes)</string>
+    <string name="client_cpf_item_label">CPF: %s</string>
+    <string name="due_date_delivery_item_label">Data limite: </string>
+    <string name="delete_dialog_title">Remover Entrega</string>
+    <string name="delete_dialog_message">Deseja remover a entrega selecionada?</string>
+    <string name="yes_label">Sim</string>
+    <string name="no_label">Não</string>
+    <string name="choose_date_label">Escolher data</string>
+    <string name="deliveries_list_title">Lista de Entregas</string>
+    <string name="new_delivery_title">Nova Entrega</string>
+    <string name="update_delivery_title">Atualizar Entrega</string>
 </resources>
