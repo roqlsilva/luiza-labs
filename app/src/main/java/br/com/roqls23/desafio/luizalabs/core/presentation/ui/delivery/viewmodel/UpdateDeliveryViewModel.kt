@@ -11,10 +11,10 @@ import br.com.roqls23.desafio.luizalabs.core.domain.entity.DistrictEntity
 import br.com.roqls23.desafio.luizalabs.core.domain.entity.StateEntity
 import br.com.roqls23.desafio.luizalabs.core.domain.interfaces.state.DataState
 import br.com.roqls23.desafio.luizalabs.core.domain.interfaces.state.UiState
-import br.com.roqls23.desafio.luizalabs.core.domain.usecase.CreateDeliveryUseCase
 import br.com.roqls23.desafio.luizalabs.core.domain.usecase.FindDeliveryByIdUseCase
 import br.com.roqls23.desafio.luizalabs.core.domain.usecase.FindDistrictsByUfUseCase
 import br.com.roqls23.desafio.luizalabs.core.domain.usecase.FindStatesUseCase
+import br.com.roqls23.desafio.luizalabs.core.domain.usecase.UpdateDeliveryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,9 +30,9 @@ class UpdateDeliveryViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
     private val findDeliveryByIdUseCase: FindDeliveryByIdUseCase,
-    private val createDeliveryUseCase: CreateDeliveryUseCase,
     private val findStatesUseCase: FindStatesUseCase,
-    private val findDistrictsByUfUseCase: FindDistrictsByUfUseCase
+    private val findDistrictsByUfUseCase: FindDistrictsByUfUseCase,
+    private val updateDeliveryUseCase: UpdateDeliveryUseCase,
 ): AndroidViewModel(application) {
 
     val deliveryId = checkNotNull(savedStateHandle.get<Long>("id"))
@@ -117,10 +117,10 @@ class UpdateDeliveryViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun createDelivery(
+    fun updateDelivery(
         data: CreateDeliveryForm
     ) = viewModelScope.launch {
-        createDeliveryUseCase(data).onEach { dataState ->
+        updateDeliveryUseCase(data).onEach { dataState ->
             when (dataState) {
                 is DataState.Loading -> {
                     Log.d("RESULT_REQUEST", "Loading...")

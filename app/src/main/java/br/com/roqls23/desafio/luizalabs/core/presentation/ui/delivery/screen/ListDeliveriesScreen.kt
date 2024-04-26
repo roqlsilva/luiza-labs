@@ -192,7 +192,7 @@ fun ListDeliveriesScreen(
                 .size(96.dp)
                 .padding(end = 24.dp, bottom = 24.dp)
                 .background(
-                    color = Color.Red,
+                    color = Color(0xFF512DA8),
                     shape = RoundedCornerShape(50)
                 )
         ) {

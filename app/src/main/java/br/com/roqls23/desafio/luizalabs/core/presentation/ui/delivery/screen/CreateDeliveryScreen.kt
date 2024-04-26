@@ -232,7 +232,7 @@ fun CreateDeliveryScreen(
             },
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Red,
+                containerColor = Color(0xFF512DA8),
                 contentColor = Color.White,
             ),
             modifier = Modifier

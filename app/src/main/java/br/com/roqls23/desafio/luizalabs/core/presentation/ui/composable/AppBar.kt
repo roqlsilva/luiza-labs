@@ -31,7 +31,7 @@ fun AppBar(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
-            .background(Color.Red),
+            .background(Color(0xFF512DA8)),
         contentAlignment = Alignment.CenterStart
     ) {
         Row(

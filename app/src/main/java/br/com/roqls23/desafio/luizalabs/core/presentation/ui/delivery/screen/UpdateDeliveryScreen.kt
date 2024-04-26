@@ -63,6 +63,10 @@ fun UpdateDeliveryScreen(
 
     LaunchedEffect(key1 = uiState.value) {
         when (val state = uiState.value) {
+            is UpdateDeliveryViewModel.UpdateDeliveryUiState.UpdatedSuccessfully -> {
+                onFinish.invoke()
+            }
+
             is UpdateDeliveryViewModel.UpdateDeliveryUiState.LoadDelivery -> {
                 form.value = state.entity.toCreateDeliveryForm()
                 viewModel.findStates()
@@ -263,11 +267,11 @@ fun UpdateDeliveryScreen(
 
             Button(
                 onClick = {
-                    viewModel.createDelivery(form.value)
+                    viewModel.updateDelivery(form.value)
                 },
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Red,
+                    containerColor = Color(0xFF512DA8),
                     contentColor = Color.White,
                 ),
                 modifier = Modifier
